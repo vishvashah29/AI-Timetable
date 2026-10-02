@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SmartStudy Priority Engine</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-icon">S</div>
+        <div><strong>SmartStudy</strong><span>Priority Engine</span></div>
+      </div>
+      <nav>
+        <button class="nav-item active" data-view="dashboard">⌂ <span>Dashboard</span></button>
+        <button class="nav-item" data-view="subjects">▣ <span>Subjects</span></button>
+        <button class="nav-item" data-view="sessions">◷ <span>Study Sessions</span></button>
+      </nav>
+      <div class="sidebar-note">
+        <b>Know what to study right now.</b>
+        <p>Your priorities change automatically as exams approach and your preparation improves.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-btn" id="menuBtn">☰</button>
+        <div>
+          <p class="eyebrow">STUDENT PRODUCTIVITY</p>
+          <h1 id="pageTitle">Good morning, Vishva 👋</h1>
+        </div>
+        <div class="header-actions">
+          <button class="icon-btn" title="Notifications">🔔</button>
+          <div class="avatar">V</div>
+        </div>
+      </header>
+
+      <section id="dashboardView" class="view active">
+        <div class="hero">
+          <div>
+            <span class="pill">Dynamic Priority Engine</span>
+            <h2>Focus on what deserves your time most.</h2>
+            <p>SmartStudy analyzes urgency, preparation gap, difficulty and exam weightage to create your study order.</p>
+          </div>
+          <div class="hero-score">
+            <span>Today's focus</span>
+            <strong id="focusSubject">—</strong>
+            <small id="focusReason">Add a subject to get started.</small>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card"><span>📚 Subjects</span><strong id="statSubjects">0</strong><small>active subjects</small></div>
+          <div class="stat-card"><span>🎯 Avg. Preparation</span><strong id="statPrep">0%</strong><small>overall progress</small></div>
+          <div class="stat-card"><span>⏱ Available Today</span><strong id="statTime">120m</strong><small>study time</small></div>
+          <div class="stat-card"><span>🔥 Top Priority</span><strong id="statPriority">—</strong><small id="statPriorityScore">priority score —</small></div>
+        </div>
+
+        <div class="content-grid">
+          <section class="panel">
+            <div class="panel-head">
+              <div><h3>Today's Priority</h3><p>Recalculated from your latest data.</p></div>
+              <button class="ghost-btn" id="refreshBtn">↻ Recalculate</button>
+            </div>
+            <div id="priorityList" class="priority-list"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head"><div><h3>Recommended Plan</h3><p>Based on your available study time.</p></div></div>
+            <div id="planList" class="plan-list"></div>
+            <button class="primary-btn full" id="startTopBtn">Start Top Priority Session</button>
+          </section>
+        </div>
+
+        <section class="panel progress-panel">
+          <div class="panel-head"><div><h3>Preparation Overview</h3><p>Update a subject after completing a study session.</p></div></div>
+          <div id="progressList" class="progress-list"></div>
+        </section>
+      </section>
+
+      <section id="subjectsView" class="view">
+        <div class="section-title">
+          <div><span class="eyebrow">ACADEMIC DATA</span><h2>Manage Subjects</h2><p>Add exam dates, preparation, difficulty and weightage.</p></div>
+          <button class="primary-btn" id="addSubjectBtn">＋ Add Subject</button>
+        </div>
+        <div class="panel">
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Subject</th><th>Exam</th><th>Preparation</th><th>Difficulty</th><th>Weightage</th><th>Priority</th><th></th></tr></thead>
+              <tbody id="subjectTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="sessionsView" class="view">
+        <div class="section-title">
+          <div><span class="eyebrow">STUDY SESSION MANAGER</span><h2>Study Sessions</h2><p>Track focused study time and topics.</p></div>
+        </div>
+        <div class="session-layout">
+          <section class="timer-card panel">
+            <span class="timer-label">FOCUS TIMER</span>
+            <h3 id="timerSubject">Select a subject</h3>
+            <div id="timer">25:00</div>
+            <div class="timer-controls">
+              <button class="primary-btn" id="timerStart">Start</button>
+              <button class="ghost-btn" id="timerReset">Reset</button>
+            </div>
+            <div class="timer-select"><label>Subject</label><select id="timerSelect"></select></div>
+            <div class="timer-select"><label>Topic studied</label><input id="timerTopic" placeholder="e.g. SQL Joins"></div>
+          </section>
+          <section class="panel">
+            <div class="panel-head"><div><h3>Recent Sessions</h3><p>Saved locally in your browser.</p></div></div>
+            <div id="sessionList" class="session-list"></div>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="modal">
+    <div class="modal">
+      <div class="modal-head"><div><span class="eyebrow">NEW SUBJECT</span><h3>Add Subject</h3></div><button class="close-btn" id="closeModal">×</button></div>
+      <form id="subjectForm">
+        <div class="form-grid">
+          <label>Subject name<input name="name" required placeholder="e.g. DBMS"></label>
+          <label>Exam date<input name="exam" type="date" required></label>
+          <label>Preparation %<input name="prep" type="number" min="0" max="100" value="50" required></label>
+          <label>Difficulty
+            <select name="difficulty"><option value="1">Easy</option><option value="2" selected>Medium</option><option value="3">Hard</option><option value="4">Very Hard</option><option value="5">Extreme</option></select>
+          </label>
+          <label>Exam weightage %<input name="weightage" type="number" min="1" max="100" value="20" required></label>
+          <label>Available minutes<input name="minutes" type="number" min="0" max="600" value="120" required></label>
+        </div>
+        <div class="form-actions"><button type="button" class="ghost-btn" id="cancelModal">Cancel</button><button class="primary-btn">Add Subject</button></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
